@@ -1,4 +1,6 @@
+'''Import the Flask class from the flask module.'''
 from flask import Flask, request, render_template
+'''Import the random module.'''
 import random
 
 app = Flask(__name__)
@@ -8,18 +10,15 @@ def sort_letters(message):
     and return the new string."""
     return ''.join(sorted(list(message)))
 
-
 @app.route('/')
 def homepage():
     """A homepage with handy links for your convenience."""
     return render_template('home.html')
 
-
 @app.route('/froyo')
 def choose_froyo():
     """Shows a form to collect the user's Fro-Yo order."""
     return render_template('froyo_form.html')
-
 
 @app.route('/froyo_results')
 def show_froyo_results():
@@ -29,7 +28,6 @@ def show_froyo_results():
         'users_froyo_toppings': request.args.get('toppings')
     }
     return render_template('froyo_results.html', **context)
-
 
 @app.route('/favorites')
 def favorites():
@@ -48,7 +46,6 @@ def favorites():
         <input type="submit" value="Submit!">
     </form>
     """
-
 
 @app.route('/favorites_results')
 def favorites_results():
@@ -96,15 +93,14 @@ def calculator_results():
         result = value1 * value2
     elif operation == 'divide':
         result = value1 / value2
-        
+     
     context = {
         'value1': value1,
         'value2': value2,
         'operation': operation,
         'result': result
     }
-    
-        
+
     return render_template('calculator_results.html', **context)
 
 
@@ -131,18 +127,11 @@ def horoscope_form():
 @app.route('/horoscope_results')
 def horoscope_results():
     """Shows the user the result for their chosen horoscope."""
-
-    # TODO: Get the sign the user entered in the form, based on their birthday
-    horoscope_sign = ''
-
-    # TODO: Look up the user's personality in the HOROSCOPE_PERSONALITIES
-    # dictionary based on what the user entered
-    users_personality = ''
-
-    # TODO: Generate a random number from 1 to 99
-    lucky_number = 0
-
+    horoscope_sign = request.args.get('horoscope_sign')
+    users_personality = HOROSCOPE_PERSONALITIES[horoscope_sign]
+    lucky_number = random.randint(1, 99)
     context = {
+        'name': request.args.get('users_name'),
         'horoscope_sign': horoscope_sign,
         'personality': users_personality, 
         'lucky_number': lucky_number
