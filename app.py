@@ -14,25 +14,22 @@ def homepage():
     """A homepage with handy links for your convenience."""
     return render_template('home.html')
 
+
 @app.route('/froyo')
 def choose_froyo():
     """Shows a form to collect the user's Fro-Yo order."""
-    return """
-    <form action="/froyo_results" method="GET">
-        What is your favorite Fro-Yo flavor? <br/>
-        <input type="text" name="flavor"><br/>
-        What toppings would you like on your Fro-Yo? <br/>
-        <input type="text" name="toppings"><br/>
-        <input type="submit" value="Submit!">
-    </form>
-    """
+    return render_template('froyo_form.html')
+
 
 @app.route('/froyo_results')
 def show_froyo_results():
     """Shows the user what they ordered from the previous page."""
-    users_froyo_flavor = request.args.get('flavor')
-    users_froyo_toppings = request.args.get('toppings')
-    return f'You ordered {users_froyo_flavor} flavored Fro-Yo with the following toppings: {users_froyo_toppings}!'
+    context = {
+        'users_froyo_flavor': request.args.get('flavor'),
+        'users_froyo_toppings': request.args.get('toppings')
+    }
+    return render_template('froyo_results.html', **context)
+
 
 @app.route('/favorites')
 def favorites():
@@ -82,25 +79,33 @@ def message_results():
 @app.route('/calculator')
 def calculator():
     """Shows the user a form to enter 2 numbers and an operation."""
-    return """
-    <form action="/calculator_results" method="GET">
-        Please enter 2 numbers and select an operator.<br/><br/>
-        <input type="number" name="operand1">
-        <select name="operation">
-            <option value="add">+</option>
-            <option value="subtract">-</option>
-            <option value="multiply">*</option>
-            <option value="divide">/</option>
-        </select>
-        <input type="number" name="operand2">
-        <input type="submit" value="Submit!">
-    </form>
-    """
+    return render_template('calculator_form.html')
 
 @app.route('/calculator_results')
 def calculator_results():
     """Shows the user the result of their calculation."""
-    pass
+    value1 = int(request.args.get('operand1'))
+    value2 = int(request.args.get('operand2'))
+    operation = request.args.get('operation')
+    result = 0
+    if operation == 'add':
+        result = value1 + value2
+    elif operation == 'subtract':
+        result = value1 - value2
+    elif operation == 'multiply':
+        result = value1 * value2
+    elif operation == 'divide':
+        result = value1 / value2
+        
+    context = {
+        'value1': value1,
+        'value2': value2,
+        'operation': operation,
+        'result': result
+    }
+    
+        
+    return render_template('calculator_results.html', **context)
 
 
 HOROSCOPE_PERSONALITIES = {
