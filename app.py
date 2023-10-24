@@ -65,12 +65,19 @@ def favorites_results():
 def secret_message():
     """Shows the user a form to collect a secret message. Sends the result via
     the POST method to keep it a secret!"""
-    pass
+    return """
+    <form action="/message_results" method="POST">
+        Please enter your secret message..<br/><br/>
+        <input type="text" name="message">
+        <input type="submit" value="Submit!">
+    </form>
+    """
 
 @app.route('/message_results', methods=['POST'])
 def message_results():
     """Shows the user their message, with the letters in sorted order."""
-    pass
+    users_secret_message = request.form.get('message')
+    return f"Here's your secret message!<br/>{sort_letters(users_secret_message)}"
 
 @app.route('/calculator')
 def calculator():
@@ -138,6 +145,9 @@ def horoscope_results():
 
     return render_template('horoscope_results.html', **context)
 
+# if __name__ == '__main__':
+#     app.config['ENV'] = 'development'
+#     app.run(debug=True)
+
 if __name__ == '__main__':
-    app.config['ENV'] = 'development'
-    app.run(debug=True)
+    app.run(host='127.0.0.1', port=8080, debug=True)
